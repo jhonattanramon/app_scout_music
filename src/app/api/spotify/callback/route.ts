@@ -37,7 +37,7 @@ export async function GET(request:NextRequest){
             }
           )
           .then(({ data }) => {
-            return NextResponse.redirect(`http://192.168.0.7:3000/home/${data.access_token}/${data.refresh_token}`)
+            return NextResponse.redirect(`${process.env.BASE_URL}/home/${data.access_token}/${data.refresh_token}`)
           });
       } catch (err) {
         return NextResponse.json({
