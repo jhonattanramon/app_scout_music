@@ -39,40 +39,37 @@ export default function WebPlayback({ token }: Props) {
   const [current_track, setTrack] = useState<Spotify.Track>(initialTrack);
   console.log(current_track)
   useEffect(() => {
-   async function loadScript(src:string) {
-      return await new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = true;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.body.appendChild(script);
-      });
-    }
-    (
-      async () => {
-        await loadScript("https://sdk.scdn.co/spotify-player.js")
-      }
-    )()
-
     window.onSpotifyWebPlaybackSDKReady = () => {
       console.log("entrou")
       const player = new window.Spotify.Player({
         name: "Web Playback SDK",
-        getOAuthToken: (cb) => {
-          cb(token);
-        },
+        getOAuthToken: (cb) => {cb(token)},
         volume: 0.5,
+        enableMediaSession: false
       });
 
       setPlayer(player);
 
-      player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
+        // Ready
+        player.addListener('ready', ({ device_id }) => {
+          console.log('Ready with Device ID', device_id);
       });
 
-      player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
+      // Not Ready
+      player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+      });
+
+      player.addListener('initialization_error', ({ message }) => {
+          console.error(message);
+      });
+
+      player.addListener('authentication_error', ({ message }) => {
+          console.error(message);
+      });
+
+      player.addListener('account_error', ({ message }) => {
+          console.error(message);
       });
 
       player.addListener("player_state_changed", (state) => {

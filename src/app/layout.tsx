@@ -16,9 +16,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.className}`}>
+
+      <body>
+        {children}
       <Script src="https://kit.fontawesome.com/f1f36ce4f1.js"></Script>
-     
-      <body>{children}</body>
+      <Script src="https://sdk.scdn.co/spotify-player.js"></Script>  
+      </body>
     </html>
   )
 }
